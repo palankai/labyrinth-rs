@@ -20,12 +20,6 @@ pub fn make_map() -> [[Element; 41]; 41] {
     let mut map = [[Element::Path; 41]; 41];
     let mut h = Vec::from_iter((0..39).step_by(2));
     let mut v = Vec::from_iter((0..39).step_by(2));
-    let mut d = vec![
-        Direction::Up,
-        Direction::Left,
-        Direction::Down,
-        Direction::Right,
-    ];
     v.shuffle(&mut thread_rng());
     h.shuffle(&mut thread_rng());
 
