@@ -1,5 +1,7 @@
 # Simple labyrinth-based game (WIP)
 
+![Gameplay screenshot](docs/imgs/labyrinth-game-screen.png)
+
 ## How to run
 
 It is tested on Apple M1 MacOS Ventura.
@@ -15,6 +17,7 @@ cargo run
 
 - Game: WASD / Up/Left/Down/Right Controls the player
 - Game: ESC -> Back to menu
+
 
 ## Assets
 
