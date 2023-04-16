@@ -7,6 +7,8 @@
 It is tested on Apple M1 MacOS Ventura.
 However, it probably works on Linux too, maybe even on Windows.
 
+You should have [Rust](https://www.rust-lang.org/) installed.
+
 ```
 cargo run
 ```
