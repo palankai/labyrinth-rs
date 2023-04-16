@@ -1,11 +1,11 @@
 use rand::prelude::*;
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Clone, Copy, Default, PartialEq, Eq)]
 pub enum Element {
+    #[default]
     Path,
     Wall,
     Exit,
-    Player,
 }
 
 #[derive(Debug)]
@@ -17,7 +17,7 @@ enum Direction {
 }
 
 pub fn make_map() -> [[Element; 41]; 41] {
-    let mut map = [[Element::Path; 41]; 41];
+    let mut map = [[Element::default(); 41]; 41];
     let mut h = Vec::from_iter((0..39).step_by(2));
     let mut v = Vec::from_iter((0..39).step_by(2));
     v.shuffle(&mut thread_rng());
@@ -65,7 +65,7 @@ pub fn make_map() -> [[Element; 41]; 41] {
             }
         }
     }
-    map[1][40] = Element::Exit;
+    map[39][40] = Element::Exit;
     map
 }
 

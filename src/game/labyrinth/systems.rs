@@ -1,16 +1,24 @@
+use bevy::prelude::*;
+
 use crate::model::components::*;
 use crate::model::logic::*;
 use crate::utils::*;
-use bevy::prelude::*;
+
+use super::resources::*;
+
+pub fn remove_labyrinth_map_resource(mut commands: Commands) {
+    commands.remove_resource::<LabyrinthMap>();
+}
 
 pub fn spawn_walls(mut commands: Commands, asset_server: Res<AssetServer>) {
     let map = make_map();
+    let labyrinth = LabyrinthMap { map: map.clone() };
+    commands.insert_resource(labyrinth);
     for y in 0..41 {
         for x in 0..41 {
             match map[y][x] {
                 Element::Path => {}
                 Element::Exit => {}
-                Element::Player => {}
                 Element::Wall => {
                     put_wall(&mut commands, &asset_server, x as f32, y as f32);
                 }
