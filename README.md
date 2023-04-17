@@ -1,5 +1,7 @@
 # Simple labyrinth-based game (WIP)
 
+WASM version: https://palankai.github.io/labyrinth-rs/
+
 ![Gameplay screenshot](docs/imgs/labyrinth-game-screen.png)
 
 ## How to run
