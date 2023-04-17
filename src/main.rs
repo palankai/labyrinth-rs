@@ -1,3 +1,4 @@
+mod consts;
 mod game;
 mod menu;
 mod model;

@@ -17,8 +17,8 @@ impl Plugin for MenuPlugin {
             .add_systems(
                 (
                     interact_with_play_button,
-                    interact_with_quit_button,
-                    handle_key_q,
+                    //interact_with_quit_button,
+                    //handle_key_q,
                     handle_key_p,
                 )
                     .in_set(OnUpdate(AppState::Menu)),

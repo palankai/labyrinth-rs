@@ -1,3 +1,7 @@
+
+all: build-pages
+
+
 install-dependencies:
 	cargo install --root .cargo wasm-server-runner
 	cargo install --root .cargo wasm-bindgen-cli

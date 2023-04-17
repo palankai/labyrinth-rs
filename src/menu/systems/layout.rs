@@ -21,7 +21,7 @@ pub fn spawn_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
         .with_children(|parent| {
             title(parent, &asset_server);
             play_button(parent, &asset_server);
-            quit_button(parent, &asset_server);
+            //quit_button(parent, &asset_server);
         });
 }
 
@@ -63,32 +63,6 @@ fn play_button(parent: &mut ChildBuilder, asset_server: &Res<AssetServer>) -> En
                 text: Text {
                     sections: vec![TextSection::new(
                         "(P)lay",
-                        make_button_text_style(asset_server),
-                    )],
-                    alignment: TextAlignment::Center,
-                    ..Default::default()
-                },
-                ..Default::default()
-            });
-        })
-        .id()
-}
-
-fn quit_button(parent: &mut ChildBuilder, asset_server: &Res<AssetServer>) -> Entity {
-    parent
-        .spawn((
-            ButtonBundle {
-                style: BUTTON_STYLE,
-                background_color: NORMAL_BUTTON_COLOR.into(),
-                ..ButtonBundle::default()
-            },
-            QuitButton {},
-        ))
-        .with_children(|parent| {
-            parent.spawn(TextBundle {
-                text: Text {
-                    sections: vec![TextSection::new(
-                        "(Q)uit",
                         make_button_text_style(asset_server),
                     )],
                     alignment: TextAlignment::Center,
