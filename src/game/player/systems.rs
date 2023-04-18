@@ -11,7 +11,6 @@ use super::components::Player;
 pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
     let x: f32 = 1.0 * 24.0 + 12.0;
     let y: f32 = 1.0 * 24.0 + 14.0;
-
     commands.spawn((
         SpriteBundle {
             transform: Transform::from_xyz(x, y, 0.0),
@@ -30,8 +29,15 @@ pub fn despawn_player(mut commands: Commands, query: Query<Entity, With<Player>>
 
 pub fn player_movement(
     mut player_query: Query<&mut Transform, With<Player>>,
-    wall_collider_query: Query<&Transform, (With<WallCollider>, Without<Player>)>,
-    exit_collider_query: Query<&Transform, (With<ExitDoorCollider>, Without<Player>)>,
+    mut camera_query: Query<&mut Transform, (With<Camera2d>, Without<Player>)>,
+    wall_collider_query: Query<
+        &Transform,
+        (With<WallCollider>, Without<Player>, Without<Camera2d>),
+    >,
+    exit_collider_query: Query<
+        &Transform,
+        (With<ExitDoorCollider>, Without<Player>, Without<Camera2d>),
+    >,
     keyboard_input: Res<Input<KeyCode>>,
     mut next_app_state: ResMut<NextState<AppState>>,
     time: Res<Time>,
@@ -72,19 +78,25 @@ pub fn player_movement(
         }
 
         transform.translation = target;
+        if let Ok(mut camera_transform) = camera_query.get_single_mut() {
+            camera_transform.translation = target;
+        }
     }
 }
 
 fn wall_collision_check(
     target_player_pos: Vec3,
-    wall_collider_query: &Query<&Transform, (With<WallCollider>, Without<Player>)>, // Maybe with With??
+    wall_collider_query: &Query<
+        &Transform,
+        (With<WallCollider>, Without<Player>, Without<Camera2d>),
+    >, // Maybe with With??
 ) -> bool {
     for wall_transform in wall_collider_query.iter() {
         let collision = collide(
             wall_transform.translation,
             Vec2 { x: 24.0, y: 24.0 },
             target_player_pos,
-            Vec2 { x: 16.0, y: 16.0 },
+            Vec2 { x: 20.0, y: 20.0 },
         );
         if collision.is_some() {
             return true;
@@ -95,14 +107,17 @@ fn wall_collision_check(
 
 fn exit_collision_check(
     target_player_pos: Vec3,
-    exit_door_query: &Query<&Transform, (With<ExitDoorCollider>, Without<Player>)>, // Maybe with With??
+    exit_door_query: &Query<
+        &Transform,
+        (With<ExitDoorCollider>, Without<Player>, Without<Camera2d>),
+    >, // Maybe with With??
 ) -> bool {
     for transform in exit_door_query.iter() {
         let collision = collide(
             transform.translation,
             Vec2 { x: 24.0, y: 24.0 },
             target_player_pos,
-            Vec2 { x: 16.0, y: 16.0 },
+            Vec2 { x: 20.0, y: 20.0 },
         );
         if collision.is_some() {
             return true;
