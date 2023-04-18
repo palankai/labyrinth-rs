@@ -1,5 +1,9 @@
 # Changelog
 
+## 2023-04-18
+
+- Collision checker is way better (turns out I don't need to rewrite it, just use it right)
+
 ## 2023-04-17
 
 - Build it for WASM

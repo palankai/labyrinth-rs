@@ -1,1 +1,1 @@
-pub const PLAYER_SPEED: f32 = 100.0;
+pub const PLAYER_SPEED: f32 = 250.0;
