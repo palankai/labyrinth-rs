@@ -16,7 +16,7 @@ fn main() {
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "Csaba's labyrinth game".into(),
-                resolution: (984., 984.).into(),
+                resolution: (650., 650.).into(),
                 resizable: false,
                 position: WindowPosition::Automatic,
                 ..default()
