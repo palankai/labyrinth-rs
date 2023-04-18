@@ -3,6 +3,7 @@
 ## 2023-04-18
 
 - Collision checker is way better (turns out I don't need to rewrite it, just use it right)
+- Zoom in, that makes it mooore difficult ;)
 
 ## 2023-04-17
 
