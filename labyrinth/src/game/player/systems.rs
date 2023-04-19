@@ -8,8 +8,6 @@ use crate::{consts::*, utils::world_to_viewport};
 use super::super::components::{ExitDoorCollider, Player, WallCollider};
 
 pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
-    let x: f32 = 1.0 * 24.0 + 12.0;
-    let y: f32 = 1.0 * 24.0 + 12.0;
     let player_position = world_to_viewport(Vec3 {
         x: 1.0,
         y: 1.0,
