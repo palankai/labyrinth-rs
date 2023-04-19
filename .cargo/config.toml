@@ -4,3 +4,6 @@ runner = "wasm-server-runner"
 
 [install]
 root = ".cargo"
+
+[source.labytinth] # source definition and replacement
+directory = "labyrinth"

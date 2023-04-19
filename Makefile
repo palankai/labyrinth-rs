@@ -1,19 +1,21 @@
 
-all: build-pages
-
+all: build
 
 install-dependencies:
 	cargo install --root .cargo wasm-server-runner
 	cargo install --root .cargo wasm-bindgen-cli
 
-build-wasm:
-	cargo build --release --target wasm32-unknown-unknown
+labyrinth-build-wasm32:
+	cd labyrinth && make build-wasm32
 
-build-pages: build-wasm
+build: labyrinth-build-wasm32
 	mkdir -p pages
 	cp -r web/* pages/
-	cp -r assets pages/
-	.cargo/bin/wasm-bindgen --out-dir ./pages/wasm32/ --target web ./target/wasm32-unknown-unknown/release/labyrinth-game.wasm
+	cp -r labyrinth/assets pages/
+	.cargo/bin/wasm-bindgen --out-dir ./pages/wasm32/ --target web ./labyrinth/target/wasm32-unknown-unknown/release/labyrinth-game.wasm
 
-clean-pages:
+clean:
 	rm -rf pages
+
+web-dev:
+	python3 -m http.server --directory pages
