@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::model::logic::*;
+use super::level_generator::*;
 
 #[derive(Resource)]
 pub struct LabyrinthMap {

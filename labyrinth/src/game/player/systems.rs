@@ -1,29 +1,53 @@
 use bevy::prelude::*;
 use bevy::sprite::collide_aabb::collide;
 
-use crate::consts::*;
 use crate::utils::sprite;
 use crate::AppState;
+use crate::{consts::*, utils::world_to_viewport};
 
-use super::super::labyrinth::components::{ExitDoorCollider, WallCollider};
-use super::components::Player;
+use super::super::components::{ExitDoorCollider, Player, WallCollider};
 
 pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
     let x: f32 = 1.0 * 24.0 + 12.0;
-    let y: f32 = 1.0 * 24.0 + 14.0;
-    commands.spawn((
-        SpriteBundle {
-            transform: Transform::from_xyz(x, y, 0.0),
-            texture: asset_server.load(sprite("player_24x24.png")),
-            ..default()
-        },
-        Player {},
-    ));
+    let y: f32 = 1.0 * 24.0 + 12.0;
+    let player_position = world_to_viewport(Vec3 {
+        x: 1.0,
+        y: 1.0,
+        z: 0.0,
+    });
+    commands
+        .spawn((
+            SpatialBundle {
+                transform: Transform::from_translation(player_position),
+                ..default()
+            },
+            Player {},
+        ))
+        .with_children(|parent| {
+            parent.spawn(SpriteBundle {
+                transform: Transform {
+                    translation: Vec3 {
+                        x: 0.0,
+                        y: 10.0,
+                        z: 0.0,
+                    },
+                    scale: Vec3 {
+                        x: 80.0 / 96.0,
+                        y: 80.0 / 96.0,
+                        z: 0.0,
+                    },
+                    ..default()
+                },
+
+                texture: asset_server.load(sprite("player_64x64.png")),
+                ..default()
+            });
+        });
 }
 
 pub fn despawn_player(mut commands: Commands, query: Query<Entity, With<Player>>) {
     if let Ok(entity) = query.get_single() {
-        commands.entity(entity).despawn();
+        commands.entity(entity).despawn_recursive();
     }
 }
 
@@ -94,9 +118,9 @@ fn wall_collision_check(
     for wall_transform in wall_collider_query.iter() {
         let collision = collide(
             wall_transform.translation,
-            Vec2 { x: 24.0, y: 24.0 },
+            Vec2 { x: 64.0, y: 64.0 },
             target_player_pos,
-            Vec2 { x: 20.0, y: 20.0 },
+            Vec2 { x: 62.0, y: 62.0 },
         );
         if collision.is_some() {
             return true;

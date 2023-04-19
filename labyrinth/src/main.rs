@@ -1,7 +1,6 @@
 mod consts;
 mod game;
 mod menu;
-mod model;
 mod utils;
 mod viewport;
 

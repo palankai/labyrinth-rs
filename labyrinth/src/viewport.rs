@@ -18,7 +18,7 @@ mod systems {
 
         commands.spawn(Camera2dBundle {
             projection: OrthographicProjection {
-                scaling_mode: ScalingMode::WindowSize(4.0),
+                scaling_mode: ScalingMode::WindowSize(2.0),
                 ..default()
             },
             transform: Transform::from_xyz(window.width() / 2.0, window.height() / 2.0, 0.0),

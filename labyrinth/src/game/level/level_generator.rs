@@ -1,3 +1,4 @@
+use bevy::prelude::*;
 use rand::prelude::*;
 
 #[derive(Clone, Copy, Default, PartialEq, Eq)]
@@ -16,7 +17,27 @@ enum Direction {
     Right,
 }
 
-pub fn make_map() -> [[Element; 41]; 41] {
+pub fn make_random_wall_tiles() -> Vec<Vec3> {
+    let map = make_level_map();
+    let mut tiles: Vec<Vec3> = vec![];
+    for y in 0..41 {
+        for x in 0..41 {
+            match map[y][x] {
+                Element::Path => {}
+                Element::Wall => tiles.push(Vec3 {
+                    x: x as f32,
+                    y: y as f32,
+                    z: 0.0,
+                }),
+                Element::Exit => {}
+            }
+        }
+    }
+
+    tiles
+}
+
+pub fn make_level_map() -> [[Element; 41]; 41] {
     let mut map = [[Element::default(); 41]; 41];
     let mut h = Vec::from_iter((0..39).step_by(2));
     let mut v = Vec::from_iter((0..39).step_by(2));
