@@ -2,8 +2,6 @@
 
 ## 2023-04-19
 
-- Collision checker is way better (it turns out I don't need to rewrite it, use it right)
-- Zoom in; that makes it more difficult ;)
 - [Next.js or not Next.js](#the-rabbit-hole-of-nextjs)
 - [Introducing component hierarchy](#component-hierarchy)
 - Adding root level Makefile and putting the rust code into the `labyrinth/` subfolder
@@ -91,6 +89,10 @@ not the bottom left corner.
 I also started to work towards dynamic-sized map generation.
 These "halfway-through" code changes will enable me to make smaller or larger maps and build outer skirts.
 
+## 2023-04-18
+
+- Collision checker is way better (it turns out I don't need to rewrite it, use it right)
+- Zoom in; that makes it more difficult ;)
 
 ## 2023-04-17
 
