@@ -1,5 +1,38 @@
 # Changelog
 
+## 2023-04-20
+
+- [New level map data structure](#new-level-map-datastructure)
+- [A bit more complex map](#a-slight-map-change)
+- First unit tests - for the map data
+- Reduced the size of the labyrinth
+- Fixed the movements (still temporary fix)
+- Put the exit to random places
+
+### New level map data structure
+
+This release doesn't contain many gameplay improvements, but I changed how the level
+map works, which gives me much more flexibility.
+
+The original level map was a two-dimensional array.
+It had multiple issues:
+- I had to reserve the memory upfront for the potential most extensive map.
+- The non-map tiles were also in the memory
+- The math shouldn't be too complicated, but I had to use offsets a lot.
+
+The new data structure:
+```rust
+type TheMap = HashMap<i32, HashMap<i32, Vec<Elements>>>;
+```
+That might look worse than arrays, but I can easily access random points.
+The storage only depends on the number of used coordinates.
+
+### A slight map change
+
+The better map data allow me to build an outskirts labyrinth as well.
+You won't know if you are next to the furthest wall or not.
+Ok, it is a bit evil, but hey, I want to make it challenging.
+
 ## 2023-04-19
 
 - [Next.js or not Next.js](#the-rabbit-hole-of-nextjs)

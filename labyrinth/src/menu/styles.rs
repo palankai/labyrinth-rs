@@ -34,7 +34,6 @@ pub fn make_title_text_style(asset_server: &Res<AssetServer>) -> TextStyle {
         font: asset_server.load(font("FiraSans-Bold.ttf")),
         font_size: 64.0,
         color: Color::WHITE,
-        ..Default::default()
     }
 }
 
@@ -43,6 +42,5 @@ pub fn make_button_text_style(asset_server: &Res<AssetServer>) -> TextStyle {
         font: asset_server.load(font("FiraSans-Bold.ttf")),
         font_size: 32.0,
         color: Color::WHITE,
-        ..Default::default()
     }
 }
