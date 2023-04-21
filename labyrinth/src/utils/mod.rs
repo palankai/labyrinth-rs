@@ -1,4 +1,5 @@
 pub mod collections;
+use rand::seq::SliceRandom;
 
 use super::consts::SPRITE_SIZE;
 
@@ -18,4 +19,8 @@ pub fn font(s: &str) -> String {
 
 pub fn world_to_viewport(p: Vec3) -> Vec3 {
     p * SPRITE_SIZE
+}
+
+pub fn pick<T: Clone>(v: Vec<T>) -> Option<T> {
+    v.choose(&mut rand::thread_rng()).cloned()
 }

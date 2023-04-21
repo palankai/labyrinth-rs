@@ -1,3 +1,5 @@
+use std::f32::consts::{FRAC_PI_2, PI};
+
 use bevy::prelude::*;
 
 use super::super::components::*;
@@ -40,11 +42,17 @@ pub fn spawn_level(mut commands: Commands, asset_server: Res<AssetServer>) {
                     commands.entity(main).add_child(player);
                 }
                 Element::Wall => {
+                    let r = pick(vec![0.0, FRAC_PI_2, PI, -FRAC_PI_2]).unwrap();
                     let wall = commands
                         .spawn((
                             SpriteBundle {
-                                transform: Transform::from_translation(viewport_position),
+                                transform: Transform {
+                                    translation: viewport_position,
+                                    rotation: Quat::from_rotation_z(r),
+                                    ..default()
+                                },
                                 texture: asset_server.load(sprite("wall_64x64.png")),
+
                                 ..default()
                             },
                             Wall {},

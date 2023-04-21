@@ -1,10 +1,15 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, utils::Instant};
 
 #[derive(Component)]
 pub struct Level {}
 
 #[derive(Component)]
 pub struct Player {}
+
+#[derive(Component, Debug)]
+pub struct MovingPlayer {
+    pub started: Instant,
+}
 
 #[derive(Component)]
 pub struct Walls {
