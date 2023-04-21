@@ -3,7 +3,7 @@
 ## 2023-04-21
 
 - [I changed to event-based control](devblog/2023-04-21.md#event-based-control)
-
+- [Potential mobile web play](devblog/2023-04-21.md#mobile-play)
 
 ## 2023-04-20
 
