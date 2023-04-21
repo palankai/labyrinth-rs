@@ -23,7 +23,7 @@ pub const TITLE_NODE_STYLE: Style = Style {
 };
 
 pub const BUTTON_STYLE: Style = Style {
-    size: Size::new(Val::Px(200.0), Val::Px(80.0)),
+    size: Size::new(Val::Px(400.0), Val::Px(160.0)),
     justify_content: JustifyContent::Center,
     align_items: AlignItems::Center,
     ..Style::DEFAULT
@@ -32,7 +32,7 @@ pub const BUTTON_STYLE: Style = Style {
 pub fn make_title_text_style(asset_server: &Res<AssetServer>) -> TextStyle {
     TextStyle {
         font: asset_server.load(font("FiraSans-Bold.ttf")),
-        font_size: 64.0,
+        font_size: 96.0,
         color: Color::WHITE,
     }
 }
@@ -40,7 +40,7 @@ pub fn make_title_text_style(asset_server: &Res<AssetServer>) -> TextStyle {
 pub fn make_button_text_style(asset_server: &Res<AssetServer>) -> TextStyle {
     TextStyle {
         font: asset_server.load(font("FiraSans-Bold.ttf")),
-        font_size: 32.0,
+        font_size: 64.0,
         color: Color::WHITE,
     }
 }

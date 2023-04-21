@@ -5,7 +5,6 @@ mod utils;
 mod viewport;
 
 use bevy::prelude::*;
-
 use game::*;
 use menu::*;
 use viewport::*;
