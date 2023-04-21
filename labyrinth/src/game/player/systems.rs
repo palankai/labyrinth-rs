@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 use bevy::sprite::collide_aabb::collide;
 
-use crate::consts::*;
 use crate::AppState;
+use crate::{consts::*, game::events::MoveRequested};
 
 use super::super::components::{ExitDoorCollider, Player, WallCollider};
 
@@ -17,49 +17,39 @@ pub fn player_movement(
         &Transform,
         (With<ExitDoorCollider>, Without<Player>, Without<Camera2d>),
     >,
-    keyboard_input: Res<Input<KeyCode>>,
+    mut events: EventReader<MoveRequested>,
+    //    keyboard_input: Res<Input<KeyCode>>,
     mut next_app_state: ResMut<NextState<AppState>>,
     time: Res<Time>,
 ) {
     let time_delta = time.delta_seconds();
     if let Ok(mut transform) = player_query.get_single_mut() {
-        let mut step_x = Vec3::ZERO;
-        let mut step_y = Vec3::ZERO;
+        for event in events.iter() {
+            let step_x = Vec3::new(event.direction.x, 0.0, 0.0);
+            let step_y = Vec3::new(0.0, event.direction.y, 0.0);
 
-        if keyboard_input.pressed(KeyCode::Left) || keyboard_input.pressed(KeyCode::A) {
-            step_x += Vec3::new(-1.0, 0.0, 0.0);
-        }
-        if keyboard_input.pressed(KeyCode::Right) || keyboard_input.pressed(KeyCode::D) {
-            step_x += Vec3::new(1.0, 0.0, 0.0);
-        }
-        if keyboard_input.pressed(KeyCode::Up) || keyboard_input.pressed(KeyCode::W) {
-            step_y += Vec3::new(0.0, 1.0, 0.0);
-        }
-        if keyboard_input.pressed(KeyCode::Down) || keyboard_input.pressed(KeyCode::S) {
-            step_y += Vec3::new(0.0, -1.0, 0.0);
-        }
+            let step_x = step_x * PLAYER_SPEED * time_delta;
+            let step_y = step_y * PLAYER_SPEED * time_delta;
 
-        let step_x = step_x * PLAYER_SPEED * time_delta;
-        let step_y = step_y * PLAYER_SPEED * time_delta;
+            #[allow(clippy::clone_on_copy)]
+            let mut target = transform.translation.clone();
 
-        #[allow(clippy::clone_on_copy)]
-        let mut target = transform.translation.clone();
+            if !wall_collision_check(target + step_x, &wall_collider_query) {
+                target += step_x;
+            }
 
-        if !wall_collision_check(target + step_x, &wall_collider_query) {
-            target += step_x;
-        }
+            if !wall_collision_check(target + step_y, &wall_collider_query) {
+                target += step_y;
+            }
 
-        if !wall_collision_check(target + step_y, &wall_collider_query) {
-            target += step_y;
-        }
+            if exit_collision_check(target, &exit_collider_query) {
+                next_app_state.set(AppState::Menu);
+            }
 
-        if exit_collision_check(target, &exit_collider_query) {
-            next_app_state.set(AppState::Menu);
-        }
-
-        transform.translation = target;
-        if let Ok(mut camera_transform) = camera_query.get_single_mut() {
-            camera_transform.translation = target;
+            transform.translation = target;
+            if let Ok(mut camera_transform) = camera_query.get_single_mut() {
+                camera_transform.translation = target;
+            }
         }
     }
 }
