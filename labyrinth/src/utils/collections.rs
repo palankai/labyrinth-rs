@@ -94,7 +94,7 @@ mod tests {
     fn test_empty() {
         let m: DynamicMap<i32> = DynamicMap::new();
 
-        assert!(m.is_empty(0, 0) == true);
+        assert!(m.is_empty(0, 0));
     }
 
     #[test]
@@ -102,7 +102,7 @@ mod tests {
         let mut m: DynamicMap<i32> = DynamicMap::new();
         m.add(3, 6, 1);
 
-        assert!(m.is_empty(3, 6) == false);
+        assert!(!m.is_empty(3, 6));
     }
 
     #[test]
@@ -111,7 +111,7 @@ mod tests {
         m.add(3, 6, 1);
         m.clear(3, 6);
 
-        assert!(m.is_empty(3, 6) == true);
+        assert!(m.is_empty(3, 6));
     }
 
     #[test]
@@ -119,7 +119,7 @@ mod tests {
         let mut m: DynamicMap<i32> = DynamicMap::new();
         m.clear(0, 0);
 
-        assert!(m.is_empty(0, 0) == true);
+        assert!(m.is_empty(0, 0));
     }
 
     #[test]
