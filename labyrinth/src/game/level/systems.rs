@@ -8,8 +8,12 @@ use super::Element;
 use crate::utils::*;
 
 pub fn spawn_level(mut commands: Commands, asset_server: Res<AssetServer>) {
-    let main = commands.spawn((SpatialBundle::default(), Level {})).id();
-    let walls = commands.spawn((SpatialBundle::default(), Walls {})).id();
+    let main = commands
+        .spawn((SpatialBundle::default(), Level {}, Name::new("Level")))
+        .id();
+    let walls = commands
+        .spawn((SpatialBundle::default(), Walls {}, Name::new("Walls")))
+        .id();
     commands.entity(main).add_child(walls);
 
     let level = SimpleLevel::generate(4, 3);
@@ -33,6 +37,7 @@ pub fn spawn_level(mut commands: Commands, asset_server: Res<AssetServer>) {
                             },
                             ExitDoor {},
                             ExitDoorCollider {},
+                            Name::new("ExitDoor"),
                         ))
                         .id();
                     commands.entity(main).add_child(exit);
@@ -57,6 +62,7 @@ pub fn spawn_level(mut commands: Commands, asset_server: Res<AssetServer>) {
                             },
                             Wall {},
                             WallCollider {},
+                            Name::new(format!("Wall: ({x}, {y})", x = tile.x, y = tile.y)),
                         ))
                         .id();
                     commands.entity(walls).add_child(wall);
@@ -84,6 +90,7 @@ fn spawn_player(
                 ..default()
             },
             Player {},
+            Name::new("Player"),
         ))
         .with_children(|parent| {
             parent.spawn(SpriteBundle {

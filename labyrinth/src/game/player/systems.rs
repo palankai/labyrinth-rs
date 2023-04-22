@@ -1,5 +1,3 @@
-use std::time::Duration;
-
 use bevy::prelude::*;
 use bevy::sprite::collide_aabb::collide;
 
@@ -16,23 +14,41 @@ pub fn player_is_on_the_move(current_player_state: Res<State<PlayerState>>) {
 
 pub fn player_is_moving(
     mut commands: Commands,
-    player_query: Query<(Entity, &MovingPlayer), With<MovingPlayer>>,
+    mut player_query: Query<(Entity, &mut Transform, &mut MovingPlayer), With<MovingPlayer>>,
+    mut camera_query: Query<&mut Transform, (With<Camera2d>, Without<MovingPlayer>)>,
     time: Res<Time>,
 ) {
-    for (entity, movement) in player_query.iter() {
-        if let Some(last_updated) = time.last_update() {
-            let elapsed = last_updated - movement.started;
-            if elapsed > Duration::from_millis(150) {
-                commands.entity(entity).remove::<MovingPlayer>();
-            }
+    let mut camera_transform = camera_query.get_single_mut().unwrap();
+
+    for (entity, mut player_transform, mut movement) in player_query.iter_mut() {
+        movement.timer.tick(time.delta());
+        if movement.timer.just_finished() {
+            move_player(
+                &mut player_transform,
+                &mut camera_transform,
+                movement.target,
+            );
+            commands.entity(entity).remove::<MovingPlayer>();
+        } else {
+            let position =
+                movement.starging_position + movement.step * movement.timer.percent() * 0.85;
+            move_player(&mut player_transform, &mut camera_transform, position);
         }
     }
 }
 
+pub fn move_player(
+    player_transform: &mut Transform,
+    camera_transform: &mut Transform,
+    position: Vec3,
+) {
+    player_transform.translation = position;
+    camera_transform.translation = position;
+}
+
 pub fn player_movement(
     mut commands: Commands,
-    mut player_query: Query<&mut Transform, (With<Player>, Without<MovingPlayer>)>,
-    mut camera_query: Query<&mut Transform, (With<Camera2d>, Without<Player>)>,
+    player_query: Query<&Transform, (With<Player>, Without<MovingPlayer>)>,
     player_entity: Query<Entity, With<Player>>,
     wall_collider_query: Query<
         &Transform,
@@ -44,41 +60,39 @@ pub fn player_movement(
     >,
     mut events: EventReader<MoveRequested>,
     mut next_app_state: ResMut<NextState<AppState>>,
-    time: Res<Time>,
 ) {
-    if let Ok(mut transform) = player_query.get_single_mut() {
+    if let Ok(transform) = player_query.get_single() {
         for event in events.iter() {
             let step_x = Vec3::new(event.direction.x, 0.0, 0.0);
             let step_y = Vec3::new(0.0, event.direction.y, 0.0);
 
             let step_x = step_x * 64.0; //PLAYER_SPEED * time_delta;
             let step_y = step_y * 64.0; //PLAYER_SPEED * time_delta;
-            if let Ok(player_entity) = player_entity.get_single() {
-                if let Some(last_updated) = time.last_update() {
-                    commands.entity(player_entity).insert(MovingPlayer {
-                        started: last_updated,
-                    });
-                }
-            }
             #[allow(clippy::clone_on_copy)]
-            let mut target = transform.translation.clone();
+            let mut step = Vec3::ZERO;
 
-            if !wall_collision_check(target + step_x, &wall_collider_query) {
-                target += step_x;
+            if !wall_collision_check(transform.translation + step + step_x, &wall_collider_query) {
+                step += step_x;
             }
 
-            if !wall_collision_check(target + step_y, &wall_collider_query) {
-                target += step_y;
+            if !wall_collision_check(transform.translation + step + step_y, &wall_collider_query) {
+                step += step_y;
             }
 
-            if exit_collision_check(target, &exit_collider_query) {
+            if exit_collision_check(transform.translation + step, &exit_collider_query) {
                 next_app_state.set(AppState::Menu);
             }
 
-            transform.translation = target;
-            if let Ok(mut camera_transform) = camera_query.get_single_mut() {
-                camera_transform.translation = target;
+            if let Ok(player_entity) = player_entity.get_single() {
+                commands.entity(player_entity).insert(MovingPlayer {
+                    timer: Timer::from_seconds(0.15, TimerMode::Once),
+                    starging_position: transform.translation,
+                    step,
+                    target: transform.translation + step,
+                });
             }
+
+            //transform.translation = target;
         }
     }
 }

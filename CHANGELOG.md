@@ -1,5 +1,11 @@
 # Changelog
 
+## 2023-04-22
+
+- [Nicer character movement](devblog/2023-04-22.md#nicer-movement)
+- [Little changes](devblog/2023-04-22.md#little-improvements)
+- Switched to the latest [Rust 1.69](https://blog.rust-lang.org/2023/04/20/Rust-1.69.0.html)
+
 ## 2023-04-21
 
 - [I changed to event-based control](devblog/2023-04-21.md#event-based-control)
